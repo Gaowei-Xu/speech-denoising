@@ -67,19 +67,19 @@ def train():
                 print('[Training] Epoch {}: batch {} / {}: loss = {}, # of parameters = {}.'.format(
                     e+1, batch, batch_generator.train_batch_amount, round(train_batch_loss, 4), total_params))
 
-                if (batch + 1) % 50 == 0:
-                    import matplotlib.pyplot as plt
-                    plt.figure()
-                    plt.subplot(311)
-                    plt.plot(input_batch[0])
-                    plt.title('noisy sequence')
-                    plt.subplot(312)
-                    plt.plot(gt_batch[0])
-                    plt.title('clean  sequence')
-                    plt.subplot(313)
-                    plt.plot(denoised_seq[0])
-                    plt.title('inferred sequence')
-                    plt.show()
+                # if (batch + 1) % 50 == 0:
+                #     import matplotlib.pyplot as plt
+                #     plt.figure()
+                #     plt.subplot(311)
+                #     plt.plot(input_batch[0])
+                #     plt.title('noisy sequence')
+                #     plt.subplot(312)
+                #     plt.plot(gt_batch[0])
+                #     plt.title('clean  sequence')
+                #     plt.subplot(313)
+                #     plt.plot(denoised_seq[0])
+                #     plt.title('inferred sequence')
+                #     plt.show()
 
             train_loss[e] /= batch_generator.train_batch_amount
             print('--------------------------------------------------------------------------------------------------')
