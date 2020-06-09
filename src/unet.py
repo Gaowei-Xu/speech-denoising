@@ -97,7 +97,7 @@ class DenoiseUNetModel(object):
             concat_4 = tf.concat([upconv_4, conv_2], axis=-1)
             conv_17 = tf.keras.layers.Conv1D(filters=24, kernel_size=3, padding='SAME', activation=tf.nn.leaky_relu)(concat_4)
             conv_18 = tf.keras.layers.Conv1D(filters=24, kernel_size=3, padding='SAME', activation=tf.nn.leaky_relu)(conv_17)
-            conv_19 = tf.keras.layers.Conv1D(filters=1, kernel_size=3, padding='SAME', activation=tf.nn.leaky_relu)(conv_18)
+            conv_19 = tf.keras.layers.Conv1D(filters=1, kernel_size=3, padding='SAME', activation=tf.nn.sigmoid)(conv_18)
             self._denoised_seq = tf.reshape(conv_19, shape=[self._config.batch_size, self._config.input_samples_dimen])
 
         with tf.compat.v1.variable_scope("Loss"):
