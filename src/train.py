@@ -67,7 +67,7 @@ def train():
                 print('[Training] Epoch {}: batch {} / {}: loss = {}, # of parameters = {}.'.format(
                     e+1, batch, batch_generator.train_batch_amount, round(train_batch_loss, 4), total_params))
 
-                # if (batch + 1) % 50 == 0:
+                # if (batch + 1) % 15 == 0:
                 #     import matplotlib.pyplot as plt
                 #     plt.figure()
                 #     plt.subplot(311)

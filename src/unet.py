@@ -57,54 +57,55 @@ class DenoiseUNetModel(object):
                                         self._config.input_samples_dimen,   # width
                                         1])                                 # channels
             # filters shape: [filter_width, in_channels, out_channels]
-            conv_1 = tf.keras.layers.Conv1D(filters=24, kernel_size=3, padding='SAME', activation=tf.nn.leaky_relu)(input_data)
-            conv_2 = tf.keras.layers.Conv1D(filters=24, kernel_size=3, padding='SAME', activation=tf.nn.leaky_relu)(conv_1)
+            kernel_size = 16
+            conv_1 = tf.keras.layers.Conv1D(filters=16, kernel_size=kernel_size, padding='SAME', activation=tf.nn.leaky_relu)(input_data)
+            conv_2 = tf.keras.layers.Conv1D(filters=16, kernel_size=kernel_size, padding='SAME', activation=tf.nn.leaky_relu)(conv_1)
             pool_1 = tf.keras.layers.MaxPool1D(pool_size=2, strides=2, padding='SAME')(conv_2)
 
-            conv_3 = tf.keras.layers.Conv1D(filters=32, kernel_size=3, padding='SAME', activation=tf.nn.leaky_relu)(pool_1)
-            conv_4 = tf.keras.layers.Conv1D(filters=32, kernel_size=3, padding='SAME', activation=tf.nn.leaky_relu)(conv_3)
+            conv_3 = tf.keras.layers.Conv1D(filters=24, kernel_size=kernel_size, padding='SAME', activation=tf.nn.leaky_relu)(pool_1)
+            conv_4 = tf.keras.layers.Conv1D(filters=24, kernel_size=kernel_size, padding='SAME', activation=tf.nn.leaky_relu)(conv_3)
             pool_2 = tf.keras.layers.MaxPool1D(pool_size=2, strides=2, padding='SAME')(conv_4)
 
-            conv_5 = tf.keras.layers.Conv1D(filters=48, kernel_size=3, padding='SAME', activation=tf.nn.leaky_relu)(pool_2)
-            conv_6 = tf.keras.layers.Conv1D(filters=48, kernel_size=3, padding='SAME', activation=tf.nn.leaky_relu)(conv_5)
+            conv_5 = tf.keras.layers.Conv1D(filters=32, kernel_size=kernel_size, padding='SAME', activation=tf.nn.leaky_relu)(pool_2)
+            conv_6 = tf.keras.layers.Conv1D(filters=32, kernel_size=kernel_size, padding='SAME', activation=tf.nn.leaky_relu)(conv_5)
             pool_3 = tf.keras.layers.MaxPool1D(pool_size=2, strides=2, padding='SAME')(conv_6)
 
-            conv_7 = tf.keras.layers.Conv1D(filters=64, kernel_size=3, padding='SAME', activation=tf.nn.leaky_relu)(pool_3)
-            conv_8 = tf.keras.layers.Conv1D(filters=64, kernel_size=3, padding='SAME', activation=tf.nn.leaky_relu)(conv_7)
+            conv_7 = tf.keras.layers.Conv1D(filters=48, kernel_size=kernel_size, padding='SAME', activation=tf.nn.leaky_relu)(pool_3)
+            conv_8 = tf.keras.layers.Conv1D(filters=48, kernel_size=kernel_size, padding='SAME', activation=tf.nn.leaky_relu)(conv_7)
             pool_4 = tf.keras.layers.MaxPool1D(pool_size=2, strides=2, padding='SAME')(conv_8)
 
             # bottom
-            conv_9 = tf.keras.layers.Conv1D(filters=96, kernel_size=3, padding='SAME', activation=tf.nn.leaky_relu)(pool_4)
-            conv_10 = tf.keras.layers.Conv1D(filters=96, kernel_size=3, padding='SAME', activation=tf.nn.leaky_relu)(conv_9)    # (256, 2048, 96)
+            conv_9 = tf.keras.layers.Conv1D(filters=64, kernel_size=kernel_size, padding='SAME', activation=tf.nn.leaky_relu)(pool_4)
+            conv_10 = tf.keras.layers.Conv1D(filters=64, kernel_size=kernel_size, padding='SAME', activation=tf.nn.leaky_relu)(conv_9)    # (256, 2048, 96)
 
             # net up
-            upconv_1 = conv1d_transpose(input=conv_10, filters=96, kernel_size=3, strides=2, padding='SAME')
+            upconv_1 = conv1d_transpose(input=conv_10, filters=64, kernel_size=kernel_size, strides=2, padding='SAME')
             concat_1 = tf.concat([upconv_1, conv_8], axis=-1)
-            conv_11 = tf.keras.layers.Conv1D(filters=64, kernel_size=3, padding='SAME', activation=tf.nn.leaky_relu)(concat_1)
-            conv_12 = tf.keras.layers.Conv1D(filters=64, kernel_size=3, padding='SAME', activation=tf.nn.leaky_relu)(conv_11)
+            conv_11 = tf.keras.layers.Conv1D(filters=48, kernel_size=kernel_size, padding='SAME', activation=tf.nn.leaky_relu)(concat_1)
+            conv_12 = tf.keras.layers.Conv1D(filters=48, kernel_size=kernel_size, padding='SAME', activation=tf.nn.leaky_relu)(conv_11)
 
-            upconv_2 = conv1d_transpose(input=conv_12, filters=64, kernel_size=3, strides=2, padding='SAME')
+            upconv_2 = conv1d_transpose(input=conv_12, filters=48, kernel_size=kernel_size, strides=2, padding='SAME')
             concat_2 = tf.concat([upconv_2, conv_6], axis=-1)
-            conv_13 = tf.keras.layers.Conv1D(filters=48, kernel_size=3, padding='SAME', activation=tf.nn.leaky_relu)(concat_2)
-            conv_14 = tf.keras.layers.Conv1D(filters=48, kernel_size=3, padding='SAME', activation=tf.nn.leaky_relu)(conv_13)
+            conv_13 = tf.keras.layers.Conv1D(filters=32, kernel_size=kernel_size, padding='SAME', activation=tf.nn.leaky_relu)(concat_2)
+            conv_14 = tf.keras.layers.Conv1D(filters=32, kernel_size=kernel_size, padding='SAME', activation=tf.nn.leaky_relu)(conv_13)
 
-            upconv_3 = conv1d_transpose(input=conv_14, filters=48, kernel_size=3, strides=2, padding='SAME')
+            upconv_3 = conv1d_transpose(input=conv_14, filters=32, kernel_size=kernel_size, strides=2, padding='SAME')
             concat_3 = tf.concat([upconv_3, conv_4], axis=-1)
-            conv_15 = tf.keras.layers.Conv1D(filters=32, kernel_size=3, padding='SAME', activation=tf.nn.leaky_relu)(concat_3)
-            conv_16 = tf.keras.layers.Conv1D(filters=32, kernel_size=3, padding='SAME', activation=tf.nn.leaky_relu)(conv_15)
+            conv_15 = tf.keras.layers.Conv1D(filters=24, kernel_size=kernel_size, padding='SAME', activation=tf.nn.leaky_relu)(concat_3)
+            conv_16 = tf.keras.layers.Conv1D(filters=24, kernel_size=kernel_size, padding='SAME', activation=tf.nn.leaky_relu)(conv_15)
 
-            upconv_4 = conv1d_transpose(input=conv_16, filters=32, kernel_size=3, strides=2, padding='SAME')
+            upconv_4 = conv1d_transpose(input=conv_16, filters=24, kernel_size=kernel_size, strides=2, padding='SAME')
             concat_4 = tf.concat([upconv_4, conv_2], axis=-1)
-            conv_17 = tf.keras.layers.Conv1D(filters=24, kernel_size=3, padding='SAME', activation=tf.nn.leaky_relu)(concat_4)
-            conv_18 = tf.keras.layers.Conv1D(filters=24, kernel_size=3, padding='SAME', activation=tf.nn.leaky_relu)(conv_17)
-            conv_19 = tf.keras.layers.Conv1D(filters=1, kernel_size=3, padding='SAME', activation=tf.nn.sigmoid)(conv_18)
+            conv_17 = tf.keras.layers.Conv1D(filters=16, kernel_size=kernel_size, padding='SAME', activation=tf.nn.leaky_relu)(concat_4)
+            conv_18 = tf.keras.layers.Conv1D(filters=16, kernel_size=kernel_size, padding='SAME', activation=tf.nn.leaky_relu)(conv_17)
+            conv_19 = tf.keras.layers.Conv1D(filters=1, kernel_size=kernel_size, padding='SAME', activation=tf.nn.sigmoid)(conv_18)
             self._denoised_seq = tf.reshape(conv_19, shape=[self._config.batch_size, self._config.input_samples_dimen])
 
         with tf.compat.v1.variable_scope("Loss"):
             flatten_ground_truth = tf.reshape(self._ground_truth, [self._config.batch_size, -1])
             flatten_denoised_seq = tf.reshape(conv_19, [self._config.batch_size, -1])
 
-            flatten_loss = tf.keras.losses.mean_absolute_percentage_error(
+            flatten_loss = tf.keras.losses.mean_absolute_error(
                 y_true=flatten_ground_truth,
                 y_pred=flatten_denoised_seq
             )
