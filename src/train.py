@@ -85,6 +85,7 @@ def train():
             print('--------------------------------------------------------------------------------------------------')
 
             # validation phase
+            batch_generator.reset_validation_batches()
             for batch in range(batch_generator.val_batch_amount):
                 input_batch, gt_batch = batch_generator.next_val_batch()
 
