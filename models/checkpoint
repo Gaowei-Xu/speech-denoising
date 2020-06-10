@@ -1,0 +1,2 @@
+model_checkpoint_path: "epoch_1_train_loss_803.147200_val_loss_526.050300.ckpt"
+all_model_checkpoint_paths: "epoch_1_train_loss_803.147200_val_loss_526.050300.ckpt"

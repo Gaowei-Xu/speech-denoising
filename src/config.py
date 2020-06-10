@@ -16,7 +16,7 @@ class Configuration(object):
 
         self._batch_size = 256
 
-        self._learning_rate = 0.001
+        self._learning_rate = 0.0001
 
         self._max_epoch = 250
         self._train_summary_root_dir = '../train/'
