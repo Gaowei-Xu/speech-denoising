@@ -16,12 +16,14 @@ class Configuration(object):
 
         self._batch_size = 256
 
-        self._learning_rate = 0.0001
+        self._learning_rate = 0.001
 
         self._max_epoch = 250
         self._train_summary_root_dir = '../train/'
         self._dump_model_para_root_dir = '../models/'
         self._save_every_epoch = 1
+
+        self._selected_model_name = 'epoch_1_train_loss_0.000300_val_loss_0.000000.ckpt'
 
     @property
     def train_val_clean_wav(self):
@@ -62,3 +64,7 @@ class Configuration(object):
     @property
     def save_every_epoch(self):
         return self._save_every_epoch
+
+    @property
+    def selected_model_name(self):
+        return self._selected_model_name

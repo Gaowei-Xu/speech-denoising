@@ -76,7 +76,7 @@ class DenoiseUNetModel(object):
 
             # bottom
             conv_9 = tf.keras.layers.Conv1D(filters=64, kernel_size=kernel_size, padding='SAME', activation=tf.nn.leaky_relu)(pool_4)
-            conv_10 = tf.keras.layers.Conv1D(filters=64, kernel_size=kernel_size, padding='SAME', activation=tf.nn.leaky_relu)(conv_9)    # (256, 2048, 96)
+            conv_10 = tf.keras.layers.Conv1D(filters=64, kernel_size=kernel_size, padding='SAME', activation=tf.nn.leaky_relu)(conv_9)
 
             # net up
             upconv_1 = conv1d_transpose(input=conv_10, filters=64, kernel_size=kernel_size, strides=2, padding='SAME')
@@ -105,7 +105,7 @@ class DenoiseUNetModel(object):
             flatten_ground_truth = tf.reshape(self._ground_truth, [self._config.batch_size, -1])
             flatten_denoised_seq = tf.reshape(conv_19, [self._config.batch_size, -1])
 
-            flatten_loss = tf.keras.losses.mean_absolute_error(
+            flatten_loss = 65536.0 * tf.keras.losses.mean_absolute_error(
                 y_true=flatten_ground_truth,
                 y_pred=flatten_denoised_seq
             )
@@ -147,4 +147,3 @@ class DenoiseUNetModel(object):
     @property
     def all_trainable_vars(self):
         return self._all_trainable_vars
-

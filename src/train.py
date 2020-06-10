@@ -88,7 +88,6 @@ def train():
             batch_generator.reset_validation_batches()
             for batch in range(batch_generator.val_batch_amount):
                 input_batch, gt_batch = batch_generator.next_val_batch()
-
                 val_batch_loss, denoised_seq = sess.run(
                     fetches=[
                         model.loss,
@@ -118,9 +117,8 @@ def train():
                 dump_model_full_path = os.path.join(config.dump_model_para_root_dir, model_name)
                 saver.save(sess=sess, save_path=dump_model_full_path)
 
-        # close writer and session objects
+        # close writer
         train_writer.close()
-        sess.close()
 
 
 if __name__ == '__main__':
