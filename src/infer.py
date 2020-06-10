@@ -75,6 +75,7 @@ def inference(input_audio_path, dump_full_path):
 
     session_config = tf.compat.v1.ConfigProto(allow_soft_placement=True, log_device_placement=True)
 
+    predicted_clean_seq = list()
     with tf.compat.v1.Session(config=session_config) as sess:
         model = DenoiseUNetModel(config=config)
         tf.compat.v1.global_variables_initializer().run()
@@ -96,12 +97,18 @@ def inference(input_audio_path, dump_full_path):
                     model.ground_truth: input_batch
                 })
 
-        # dump(audio, dump_full_path)
+            flatten = np.reshape(denoised_seq, newshape=(config.batch_size * config.input_samples_dimen, ))
+            flatten = flatten * 65536.0 - 32768.0
+            flatten = flatten.astype(np.short)
+            predicted_clean_seq.extend(list(flatten))
+
+        audio.audio_seq = np.array(predicted_clean_seq)
+        dump(audio, dump_full_path)
 
 
 if __name__ == '__main__':
     inference(
         input_audio_path='../test_data/对话场景_过滤前.wav',
-        dump_full_path='../test_data/denoised.wav'
+        dump_full_path='../test_data/对话场景_1D_UNet_过滤后.wav'
     )
 
