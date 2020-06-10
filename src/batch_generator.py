@@ -13,7 +13,7 @@ class BatchGenerator(object):
         self._config = config
 
         # collect all samples
-        # self.collect_samples()
+        self.collect_samples()
 
         self._train_batch_full_path = [
             os.path.join(self._config.cache_root_dir, f) for f in
