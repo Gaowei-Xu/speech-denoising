@@ -23,7 +23,7 @@ class Configuration(object):
         self._dump_model_para_root_dir = '../models/'
         self._save_every_epoch = 1
 
-        self._selected_model_name = 'epoch_1_train_loss_803.147200_val_loss_526.050300.ckpt'
+        self._selected_model_name = 'epoch_7_train_loss_348.611500_val_loss_342.913800.ckpt'
 
     @property
     def train_val_clean_wav(self):
